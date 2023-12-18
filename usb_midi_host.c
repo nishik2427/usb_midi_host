@@ -158,7 +158,7 @@ void midih_init(void)
   }
 }
 
-bool midih_xfer_cb(uint8_t dev_addr, uint8_t ep_addr, xfer_result_t result, uint32_t xferred_bytes)
+bool __time_critical_func(midih_xfer_cb)(uint8_t dev_addr, uint8_t ep_addr, xfer_result_t result, uint32_t xferred_bytes)
 {
   (void)result;
   midih_interface_t *p_midi_host = get_midi_host(dev_addr);
@@ -514,7 +514,7 @@ bool midih_set_config(uint8_t dev_addr, uint8_t itf_num)
 //--------------------------------------------------------------------+
 // Stream API
 //--------------------------------------------------------------------+
-static uint32_t write_flush(uint8_t dev_addr, midih_interface_t* midi)
+static uint32_t __time_critical_func(write_flush)(uint8_t dev_addr, midih_interface_t* midi)
 {
   // No data to send
   if ( !tu_fifo_count(&midi->tx_ff) ) return 0;
@@ -536,7 +536,7 @@ static uint32_t write_flush(uint8_t dev_addr, midih_interface_t* midi)
   }
 }
 
-uint32_t tuh_midi_stream_write (uint8_t dev_addr, uint8_t cable_num, uint8_t const* buffer, uint32_t bufsize)
+uint32_t __time_critical_func(tuh_midi_stream_write) (uint8_t dev_addr, uint8_t cable_num, uint8_t const* buffer, uint32_t bufsize)
 {
   midih_interface_t *p_midi_host = get_midi_host(dev_addr);
   TU_VERIFY(p_midi_host != NULL);
@@ -663,7 +663,7 @@ uint32_t tuh_midi_stream_write (uint8_t dev_addr, uint8_t cable_num, uint8_t con
   return i;
 }
 
-bool tuh_midi_packet_write (uint8_t dev_addr, uint8_t const packet[4])
+bool __time_critical_func(tuh_midi_packet_write) (uint8_t dev_addr, uint8_t const packet[4])
 {
   midih_interface_t *p_midi_host = get_midi_host(dev_addr);
   TU_VERIFY(p_midi_host != NULL);
@@ -678,7 +678,7 @@ bool tuh_midi_packet_write (uint8_t dev_addr, uint8_t const packet[4])
   return true;
 }
 
-uint32_t tuh_midi_stream_flush( uint8_t dev_addr )
+uint32_t __time_critical_func(tuh_midi_stream_flush)( uint8_t dev_addr )
 {
   midih_interface_t *p_midi_host = get_midi_host(dev_addr);
   TU_VERIFY(p_midi_host != NULL);
@@ -693,7 +693,7 @@ uint32_t tuh_midi_stream_flush( uint8_t dev_addr )
 //--------------------------------------------------------------------+
 // Helper
 //--------------------------------------------------------------------+
-uint8_t tuh_midih_get_num_tx_cables (uint8_t dev_addr)
+uint8_t __time_critical_func(tuh_midih_get_num_tx_cables) (uint8_t dev_addr)
 {
   midih_interface_t *p_midi_host = get_midi_host(dev_addr);
   TU_VERIFY(p_midi_host != NULL);
@@ -701,7 +701,7 @@ uint8_t tuh_midih_get_num_tx_cables (uint8_t dev_addr)
   return p_midi_host->num_cables_tx;
 }
 
-uint8_t tuh_midih_get_num_rx_cables (uint8_t dev_addr)
+uint8_t __time_critical_func(tuh_midih_get_num_rx_cables) (uint8_t dev_addr)
 {
   midih_interface_t *p_midi_host = get_midi_host(dev_addr);
   TU_VERIFY(p_midi_host != NULL);
@@ -709,7 +709,7 @@ uint8_t tuh_midih_get_num_rx_cables (uint8_t dev_addr)
   return p_midi_host->num_cables_rx;
 }
 
-bool tuh_midi_packet_read (uint8_t dev_addr, uint8_t packet[4])
+bool __time_critical_func(tuh_midi_packet_read) (uint8_t dev_addr, uint8_t packet[4])
 {
   midih_interface_t *p_midi_host = get_midi_host(dev_addr);
   TU_VERIFY(p_midi_host != NULL);
@@ -717,7 +717,7 @@ bool tuh_midi_packet_read (uint8_t dev_addr, uint8_t packet[4])
   return tu_fifo_read_n(&p_midi_host->rx_ff, packet, 4) == 4;
 }
 
-uint32_t tuh_midi_stream_read (uint8_t dev_addr, uint8_t *p_cable_num, uint8_t *p_buffer, uint16_t bufsize)
+uint32_t __time_critical_func(tuh_midi_stream_read) (uint8_t dev_addr, uint8_t *p_cable_num, uint8_t *p_buffer, uint16_t bufsize)
 {
   midih_interface_t *p_midi_host = get_midi_host(dev_addr);
   TU_VERIFY(p_midi_host != NULL);
@@ -838,7 +838,7 @@ uint32_t tuh_midi_stream_read (uint8_t dev_addr, uint8_t *p_cable_num, uint8_t *
   return bytes_buffered;
 }
 
-uint8_t tuh_midi_get_num_rx_cables(uint8_t dev_addr)
+uint8_t __time_critical_func(tuh_midi_get_num_rx_cables)(uint8_t dev_addr)
 {
   midih_interface_t *p_midi_host = get_midi_host(dev_addr);
   TU_VERIFY(p_midi_host != NULL);
@@ -850,7 +850,7 @@ uint8_t tuh_midi_get_num_rx_cables(uint8_t dev_addr)
   return num_cables;
 }
 
-uint8_t tuh_midi_get_num_tx_cables(uint8_t dev_addr)
+uint8_t __time_critical_func(tuh_midi_get_num_tx_cables)(uint8_t dev_addr)
 {
   midih_interface_t *p_midi_host = get_midi_host(dev_addr);
   TU_VERIFY(p_midi_host != NULL);
