@@ -129,7 +129,7 @@ typedef struct
 
 static midih_interface_t _midi_host[CFG_TUH_DEVICE_MAX];
 
-static midih_interface_t *get_midi_host(uint8_t dev_addr)
+static midih_interface_t __time_critical_func(*get_midi_host)(uint8_t dev_addr)
 {
   TU_VERIFY(dev_addr >0 && dev_addr <= CFG_TUH_DEVICE_MAX);
   return (_midi_host + dev_addr - 1);
@@ -486,14 +486,14 @@ bool midih_open(uint8_t rhport, uint8_t dev_addr, tusb_desc_interface_t const *d
   return true;
 }
 
-bool tuh_midi_configured(uint8_t dev_addr)
+bool __time_critical_func(tuh_midi_configured)(uint8_t dev_addr)
 {
   midih_interface_t *p_midi_host = get_midi_host(dev_addr);
   TU_VERIFY(p_midi_host != NULL);
   return p_midi_host->configured;
 }
 
-bool midih_set_config(uint8_t dev_addr, uint8_t itf_num)
+bool __time_critical_func(midih_set_config)(uint8_t dev_addr, uint8_t itf_num)
 {
   (void) itf_num;
   TU_LOG2("Set config dev_addr=%u\r\n", dev_addr);

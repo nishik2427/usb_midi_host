@@ -163,7 +163,7 @@ void tuh_midi_umount_cb(uint8_t dev_addr, uint8_t instance)
   }
 }
 
-void tuh_midi_rx_cb(uint8_t dev_addr, uint32_t num_packets)
+void __time_critical_func(tuh_midi_rx_cb)(uint8_t dev_addr, uint32_t num_packets)
 {
   if (midi_dev_addr == dev_addr) {
     if (num_packets != 0) {
@@ -183,7 +183,7 @@ void tuh_midi_rx_cb(uint8_t dev_addr, uint32_t num_packets)
   }
 }
 
-void tuh_midi_tx_cb(uint8_t dev_addr)
+void __time_critical_func(tuh_midi_tx_cb)(uint8_t dev_addr)
 {
     (void)dev_addr;
 }
